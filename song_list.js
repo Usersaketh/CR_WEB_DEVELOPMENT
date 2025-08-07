@@ -131,25 +131,34 @@ let All_song = [
 /*tracks*/
 let tracks = document.querySelector('.tracks');
 
-//creating a list or generating Html
-for (let i = 0; i < All_song.length; i++) {
+// Creating song list with error handling
+if (tracks && All_song && All_song.length > 0) {
+  for (let i = 0; i < All_song.length; i++) {
+    // Validate song data
+    if (!All_song[i].name || !All_song[i].path || !All_song[i].img || !All_song[i].singer) {
+      console.warn(`Song at index ${i} is missing required data`);
+      continue;
+    }
 
-  let Html = ` <div class="song">
-      <div class="img">
-      <img src="${All_song[i].img}"/>
-      </div>
-      <div class="more">
-      <audio src="${All_song[i].path}" id="music"></audio>
-      <div class="song_info">
-         <p id="title">${All_song[i].name}</p>
-         <p>${All_song[i].singer}</p>
-      </div>
-      <button id="play_btn"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
-      </div>
-    </div>`;
+    let Html = ` <div class="song">
+        <div class="img">
+          <img src="${All_song[i].img}" alt="${All_song[i].name} album art" onerror="this.src='images/1.jpg'"/>
+        </div>
+        <div class="more">
+          <audio src="${All_song[i].path}" id="music" preload="none"></audio>
+          <div class="song_info">
+             <p id="title" title="${All_song[i].name}">${All_song[i].name}</p>
+             <p title="${All_song[i].singer}">${All_song[i].singer}</p>
+          </div>
+          <button id="play_btn" title="Play ${All_song[i].name}"><i class="fa fa-play" aria-hidden="true"></i></button>
+        </div>
+      </div>`;
 
-  tracks.insertAdjacentHTML("beforeend", Html);
-};
+    tracks.insertAdjacentHTML("beforeend", Html);
+  }
+} else {
+  console.error("Could not generate song list: missing tracks element or song data");
+}
 
 
 /*please follow all the rules so that you do not face any problem*/
